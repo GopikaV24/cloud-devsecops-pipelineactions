@@ -9,6 +9,7 @@ We have created automated release for our **cloud-devsecops-pipelineactions** re
 
 ## Overview
 Releases are deployable software iterations you can package and make available for a wider audience to download and use. Releases are based on Git tags, which mark a specific point in your repository's history. 
+
 Automated release done by GitHub action pipeline. Once changes merged to main branch, pipeline will execute and create tags and release.
 
 ![](./semver.PNG)
