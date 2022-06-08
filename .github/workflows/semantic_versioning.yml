@@ -26,7 +26,7 @@ jobs:
         remote=$(git config --get remote.origin.url)
         repo=$(basename $remote .git)
         echo "****************GETTING LAST TAG***********************"
-        tag=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}" "https://api.github.com/repos/Test-Spike/$repo/releases/latest" | jq -r '.tag_name')
+        tag=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}" "https://api.github.com/repos/DigitalInnovation/$repo/releases/latest" | jq -r '.tag_name')
         echo "CURRENT TAG: $tag"
         echo "::set-output name=old_version::$tag"
         t=$(echo $tag | cut -c2-6)
@@ -103,10 +103,10 @@ jobs:
         curl \
         -X DELETE \
         -H "Authorization: token ${{ secrets.TOKEN }}" \
-        https://api.github.com/repos/Test-Spike/$repo/git/refs/tags/latest
+        https://api.github.com/repos/DigitalInnovation/$repo/git/refs/tags/latest
         
         echo "*****************CREATING LATEST TAG FOR THE NEW COMMITS*****************"
-        curl -s -X POST https://api.github.com/repos/Test-Spike/$repo/git/refs \
+        curl -s -X POST https://api.github.com/repos/DigitalInnovation/$repo/git/refs \
         -H "Authorization: token ${{ secrets.TOKEN }}" \
         -d @- << EOF
         {
@@ -116,7 +116,7 @@ jobs:
         EOF
         
         echo "*****************CREATING $new_tag TAG FOR THE NEW COMMITS*****************"
-        curl -s -X POST https://api.github.com/repos/Test-Spike/$repo/git/refs \
+        curl -s -X POST https://api.github.com/repos/DigitalInnovation/$repo/git/refs \
         -H "Authorization: token ${{ secrets.TOKEN }}" \
         -d @- << EOF
         {
@@ -129,7 +129,7 @@ jobs:
         short_commit=$(git log --pretty=format:'%h' -n 1)
         new_tag_commit=$new_tag-$short_commit
         echo "::set-output name=new_version_with_commit::$new_tag_commit"
-        curl -s -X POST https://api.github.com/repos/Test-Spike/$repo/git/refs \
+        curl -s -X POST https://api.github.com/repos/DigitalInnovation/$repo/git/refs \
         -H "Authorization: token ${{ secrets.TOKEN }}" \
         -d @- << EOF
         {
@@ -156,5 +156,5 @@ jobs:
         curl \
         -X POST \
         -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}"  \
-        https://api.github.com/repos/Test-Spike/$repo/releases \
+        https://api.github.com/repos/DigitalInnovation/$repo/releases \
         -d '{"tag_name":"'"$new_tag_commit"'","target_commitish":"main","name":"'"$new_tag_commit"'","body":"'"$commit_msg"'","draft":false,"prerelease":false,"generate_release_notes":true}'
