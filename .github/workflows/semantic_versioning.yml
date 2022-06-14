@@ -26,7 +26,7 @@ jobs:
         remote=$(git config --get remote.origin.url)
         repo=$(basename $remote .git)
         echo "****************GETTING LAST TAG***********************"
-        tag=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}" "https://api.github.com/repos/DigitalInnovation/$repo/releases/latest" | jq -r '.tag_name')
+        tag=$(curl -s -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" "https://api.github.com/repos/DigitalInnovation/$repo/releases/latest" | jq -r '.tag_name')
         echo "CURRENT TAG: $tag"
         echo "::set-output name=old_version::$tag"
         t=$(echo $tag | cut -c2-6)
@@ -102,12 +102,12 @@ jobs:
         echo "*****************DELETING LATEST TAG FROM THE PREVIOUS RELEASE*****************"
         curl \
         -X DELETE \
-        -H "Authorization: token ${{ secrets.TOKEN }}" \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         https://api.github.com/repos/DigitalInnovation/$repo/git/refs/tags/latest
         
         echo "*****************CREATING LATEST TAG FOR THE NEW COMMITS*****************"
         curl -s -X POST https://api.github.com/repos/DigitalInnovation/$repo/git/refs \
-        -H "Authorization: token ${{ secrets.TOKEN }}" \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d @- << EOF
         {
           "ref": "refs/tags/latest",
@@ -117,7 +117,7 @@ jobs:
         
         echo "*****************CREATING $new_tag TAG FOR THE NEW COMMITS*****************"
         curl -s -X POST https://api.github.com/repos/DigitalInnovation/$repo/git/refs \
-        -H "Authorization: token ${{ secrets.TOKEN }}" \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d @- << EOF
         {
           "ref": "refs/tags/$new_tag",
@@ -130,7 +130,7 @@ jobs:
         new_tag_commit=$new_tag-$short_commit
         echo "::set-output name=new_version_with_commit::$new_tag_commit"
         curl -s -X POST https://api.github.com/repos/DigitalInnovation/$repo/git/refs \
-        -H "Authorization: token ${{ secrets.TOKEN }}" \
+        -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
         -d @- << EOF
         {
           "ref": "refs/tags/$new_tag_commit",
@@ -155,6 +155,6 @@ jobs:
         echo "*****************CREATING RELEASE FOR THE NEW COMMITS*****************"        
         curl \
         -X POST \
-        -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.TOKEN }}"  \
+        -H "Accept: application/vnd.github.v3+json" -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"  \
         https://api.github.com/repos/DigitalInnovation/$repo/releases \
         -d '{"tag_name":"'"$new_tag_commit"'","target_commitish":"main","name":"'"$new_tag_commit"'","body":"'"$commit_msg"'","draft":false,"prerelease":false,"generate_release_notes":true}'
