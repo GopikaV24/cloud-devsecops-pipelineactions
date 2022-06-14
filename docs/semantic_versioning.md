@@ -40,7 +40,7 @@ Pipeline will cover below steps,
 |--|-------------------|------------|---------------|--------|--------|
 |1.|Introduce new functionality/ application as composite action| New feature| Major|#major|new-feature|
 |2.|Introducing new input/ additional fields in specific composite actions|New Input |Minor|#minor|additional-field|
-|3.|Switching to new tool eg: sonarqube to sonarcloud - This change may have same parameters/ new parameters will be introduced|New feature|Minor|#minor|additional-field|
+|3.|Switching to new tool eg: sonarqube to sonarcloud - This change may have same parameters/ new parameters will be introduced|New feature|Minor|#minor|additional-field/ new-feature|
 |4.|Any bug fixes in composite actions|Bug Fix| Patch|#patch|bug-fix|
 |5.|Upgrade marketplace action's version in action.yml|Action upgrade|Patch|#patch|enhancement|
 |6.|Update Documentation|Documentation|Patch|#patch|documentation|
